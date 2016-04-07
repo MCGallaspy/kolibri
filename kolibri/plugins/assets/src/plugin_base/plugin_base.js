@@ -28,7 +28,7 @@ var Plugin = function (options) {
 Plugin.prototype.plugin_options = [];
 
 /**
- * Method to automatically register the plugin with the Koliri core app once it has initialized.
+ * Method to automatically register the plugin with the Kolibri core app once it has initialized.
  * @private
  */
 Plugin.prototype._register_plugin = function() {
