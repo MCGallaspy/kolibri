@@ -17,7 +17,7 @@ urlpatterns = [
     url('^component_demo$', ComponentDemoView.as_view(), name='component_demo'),
     # url('.* ', views.TODOView.as_view())
     url('^riot_demo$', RiotDemoView.as_view(), name='riot_demo'),
-    url('^/$', views.IndexView.as_view(), name='index'),
+    url('^$', views.IndexView.as_view(), name='index'),
 ]
 
 def retrieve_plugin_urls():
