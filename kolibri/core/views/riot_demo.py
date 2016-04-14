@@ -4,4 +4,4 @@ from django.views.generic.base import TemplateView
 
 
 class RiotDemoView(TemplateView):
-    template_name = "kolibri/riot_demo_django.html"
+    template_name = "kolibri/riot_demo.html"
