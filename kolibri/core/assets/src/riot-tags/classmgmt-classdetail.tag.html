@@ -1,0 +1,40 @@
+<classmgmt-classdetail>
+    <div class="content">
+        <div>{name}</div>
+    </div>
+    <div class="button-group">
+        <button onclick={showEditForm}>Edit</button>
+    </div>
+    <classdetail-editform classroom={getClassroom(name)}></classdetail-editform>
+
+    <style scoped>
+      :scope {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .button-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .button-group button {
+        margin: 2px;
+        margin-left: 10px;
+      }
+    </style>
+
+    <script>
+        var state = require('../riotapp.state');
+        var tag = this;
+
+        tag.showEditForm = function() {
+            tag.tags['classdetail-editform'].show();
+        };
+
+        tag.getClassroom = function(name) {
+            return state.getClass(name);
+        };
+    </script>
+
+</classmgmt-classdetail>

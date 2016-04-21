@@ -1,0 +1,42 @@
+<classdetail-editform class="modal {visible ? '' : 'modal-hidden'}" onkeyup={keyup}>
+    <form class="modal-content">
+        <div class="form-row">
+            <label>Name:</label>
+            <input type="text" name="nameinput" value={name}>
+        </div>
+        <div class="buttons">
+            <button type="submit" disabled={!canSubmit()} onclick={save}>
+                Update
+            </button>
+            <button type="reset" onclick={hide}>
+                Cancel
+            </button>
+        </div>
+    </form>
+
+    <style scoped></style>
+
+    <script>
+        var tag = this;
+        var state = require('../riotapp.state');
+
+        tag.mixin(require('./modal_mixin'));
+
+        tag.keyup = function (e) {
+          // handle escape key
+          if (e.keyCode === 27) {
+            tag.hide();
+          }
+        };
+
+        tag.canSubmit = function() {
+            return tag.nameinput.value !== '';
+        };
+
+        tag.save = function() {
+            var newname = tag.nameinput.value;
+            state.updateClassName(tag.name, newname);
+            tag.hide();
+        }
+    </script>
+</classdetail-editform>

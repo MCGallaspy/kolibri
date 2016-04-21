@@ -47,6 +47,12 @@ state.getClass = function(classname) {
   });
 };
 
+state.updateClassName = function(oldname, newname) {
+  var cr = state.getClass(oldname);
+  cr.name = newname;
+  state.trigger('change');
+};
+
 /* users
 A list of objects with keys:
   `username` - string

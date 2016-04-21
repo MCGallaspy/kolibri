@@ -13,6 +13,8 @@ require('./riot-tags/usermgmt-editform.tag.html');
 require('./riot-tags/classmgmt.tag.html');
 require('./riot-tags/classmgmt-room.tag.html');
 require('./riot-tags/classmgmt-room-member.tag.html');
+require('./riot-tags/classmgmt-classdetail.tag.html');
+require('./riot-tags/classdetail-editform.tag.html');
 
 // load application state
 var state = require('./riotapp.state');
