@@ -52,10 +52,22 @@ A list of objects with keys:
   `username` - string
   `fullname` - string
 */
-state.users = [];
+state.users = [
+  {
+    username: 'foo',
+    fullname: 'Foo Bar'
+  }
+];
 
 state.addUser = function(username, fullname) {
   state.users.push({username: username, fullname: fullname});
+  state.trigger('change');
+};
+
+state.updateUser = function(username, fullname) {
+  var user = state.getUser(username);
+  debugger;  // jshint ignore:line
+  user.fullname = fullname;
   state.trigger('change');
 };
 
@@ -67,6 +79,9 @@ state.deleteUser = function(username) {
   });
   _.remove(state.users, function(user) {
     return user.username === username;
+  });
+  _.each(state.classrooms, function(cr) {
+    state.removeUserFromClass(username, cr.name);
   });
   state.trigger('change');
 };

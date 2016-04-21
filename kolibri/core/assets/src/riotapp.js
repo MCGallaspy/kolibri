@@ -9,6 +9,7 @@ require('./riot-tags/app.tag.html');
 require('./riot-tags/usermgmt.tag.html');
 require('./riot-tags/usermgmt-user.tag.html');
 require('./riot-tags/usermgmt-addform.tag.html');
+require('./riot-tags/usermgmt-editform.tag.html');
 require('./riot-tags/classmgmt.tag.html');
 require('./riot-tags/classmgmt-room.tag.html');
 require('./riot-tags/classmgmt-room-member.tag.html');

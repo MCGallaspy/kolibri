@@ -5,8 +5,9 @@
   </div>
   <div class="button-group">
     <button onclick={delete}>delete</button>
-    <button disabled>edit</button>
+    <button onclick={showEditForm}>edit</button>
   </div>
+  <usermgmt-editform user={getUser(username)}></usermgmt-editform>
 
 
   <style scoped>
@@ -40,6 +41,14 @@
     tag.delete = function () {
       state.deleteUser(tag.username);
     };
+
+    tag.showEditForm = function () {
+      tag.tags['usermgmt-editform'].show();
+    };
+
+    tag.getUser = function (username) {
+      return state.getUser(username);
+    }
   </script>
 
 </usermgmt-user>
