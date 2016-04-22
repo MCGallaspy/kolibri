@@ -15,11 +15,24 @@ logging.setDefaultLevel(2);
 logging.info('Component views loaded!');
 
 
+/*
+    Takes inspiration from the CrudAddItem view and how it's used by KolibriCrudView in order to create a modal
+    that allows items to be edited.
+
+    Needs to be defined above CrudItem.
+*/
+var CrudEditItem = Mn.ItemView.extend({
+    template: _.template('HELLO WORLD')
+});
+
+
+
 // Implements CRUD actions for a given item
 var CrudItem = Mn.ItemView.extend({
     template: function(serialized_model) {
         var html =
             '{{#each display}}<span>{{ key }} {{ value }}</span>{{/each}}' +
+            '<button class="js-edit standard-button">EDIT</button>' +
             '<button class="delete standard-button">Delete</button>';
         return Handlebars.compile(html)({
             display: _.map(this.display, function(key) {
@@ -36,11 +49,21 @@ var CrudItem = Mn.ItemView.extend({
     className: 'crudItem',
 
     triggers: {
-        'click .delete': 'itemDeleted'
+        'click .delete': 'itemDeleted',
+        'click .js-edit': 'editClicked'
+    },
+
+    onEditClicked: function(event) {
+        var modalView = new CrudEditItem({
+            model: event.model,
+            create: ['attribute'],
+        });
+        this.modalService.trigger('showModal', modalView, 'Title');
     },
 
     initialize: function(options) {
         this.display = options.display || _.keys(this.model.attributes);
+        this.modalService = options.modalService || this;
         _.bindAll(this, 'template');
     }
 });
@@ -51,7 +74,8 @@ var CrudCollection = Mn.CollectionView.extend({
 
     childViewOptions: function() {
         return {
-            display: this.display
+            display: this.display,
+            modalService: this.modalService
         };
     },
 
@@ -163,14 +187,6 @@ var CrudAddItem = Mn.ItemView.extend({
 
 
 /*
-    Advice to implementer:
-    Take inspiration from the CrudAddItem view and how it's used by KolibriCrudView in order to create a modal
-    that allows items to be edited.
-*/
-var CrudEditItem = Mn.ItemView.extend({});
-
-
-/*
     KolibriCrudView attempts to provide a unified interface for managing lists of objects.
     As the name suggests, it provides four basic operations, all of which are customizable by passing options
     to the constructor:
@@ -225,7 +241,8 @@ var KolibriCrudView = Mn.LayoutView.extend({
 
         this.collectionView = new CrudCollection({
             collection: this.collection,
-            display: this.display
+            display: this.display,
+            modalService: this.modalService,
         });
     },
 
