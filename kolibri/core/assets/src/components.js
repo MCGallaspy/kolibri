@@ -15,11 +15,88 @@ logging.setDefaultLevel(2);
 logging.info('Component views loaded!');
 
 
+/*
+    Takes inspiration from the CrudAddItem view and how it's used by KolibriCrudView in order to create a modal
+    that allows items to be edited.
+
+    Needs to be defined above CrudItem.
+*/
+var CrudEditItem = Mn.ItemView.extend({
+    template: function() {
+        var html =
+            '{{#unless valid}}<span>Invalid Input!</span><br />{{/unless}}' +
+            '{{#each editable_fields}}' +
+                '<input data-attr="{{ name }}" type="text" placeholder="{{ name }}" value="{{ default }}" /><br />' +
+            '{{/each}}' +
+            '<button class="save flat-button">Save</button>';
+        return Handlebars.compile(html)({editable_fields: this.editable_fields, valid: this.valid});
+    },
+    triggers: {
+        'click .save': 'save'
+    },
+    initialize: function(options) {
+        this.editable_fields = _.map(options.editable_fields, function(attr) {
+            return {
+                name: attr,
+                default: ''
+            };
+        });
+        this.validators = options.validators;
+        this.valid = true;
+        // Since "template" is a callback, bindAll ensures "this" refers the view instance.
+        _.bindAll(this, 'template');
+    },
+    onSave: function() {
+        if ( this.validate() ) {
+            _.forEach(this.editable_fields, _.bind(function (obj) {
+                var attr = obj.name;
+                this.model.set(attr, this.getAttrVal(attr));
+            }, this));
+            this.trigger('closeModal');
+        } else {
+            // Shows an "Invalid!" message.
+            this.rerender = true;
+            this.render();
+        }
+    },
+    onBeforeRender: function() {
+        // Before re-rendering, make sure that values user has already entered aren't trashed
+        if (this.rerender) {
+            var self = this;
+            this.editable_fields = _.map(this.editable_fields, function(old) {
+                return {
+                    name: old.name,
+                    default: self.getAttrVal(old.name)
+                };
+            });
+        }
+    },
+    getAttrVal: function(attr) {
+        var el = this.$el.find('input[data-attr=' + attr + ']');
+        return $(el).val();
+    },
+    validate: function() {
+        var self = this;
+        self.valid = true;
+        _.forEach(this.editable_fields, function(obj) {
+            var attr = obj.name;
+            if ( _.has(self.validators, attr) ) {
+                // if valid is false at any point, then due to short-circuiting the remaining validators won't be called
+                self.valid = self.valid && self.validators[attr](self.getAttrVal(attr));
+            }
+        });
+        return self.valid;
+    }
+});
+
+
+
 // Implements CRUD actions for a given item
 var CrudItem = Mn.ItemView.extend({
     template: function(serialized_model) {
         var html =
             '{{#each display}}<span>{{ key }} {{ value }}</span>{{/each}}' +
+            '<button class="js-edit standard-button">Edit</button>' +
             '<button class="delete standard-button">Delete</button>';
         return Handlebars.compile(html)({
             display: _.map(this.display, function(key) {
@@ -36,11 +113,22 @@ var CrudItem = Mn.ItemView.extend({
     className: 'crudItem',
 
     triggers: {
-        'click .delete': 'itemDeleted'
+        'click .delete': 'itemDeleted',
+        'click .js-edit': 'editClicked'
+    },
+
+    onEditClicked: function(event) {
+        var editView = new CrudEditItem({
+            collection: this.collection,
+            editable_fields: ['firstname', 'lastname'],
+            model: event.model,
+        });
+        this.modalService.trigger('showModal', editView, 'Edit User');
     },
 
     initialize: function(options) {
         this.display = options.display || _.keys(this.model.attributes);
+        this.modalService = options.modalService;
         _.bindAll(this, 'template');
     }
 });
@@ -51,12 +139,15 @@ var CrudCollection = Mn.CollectionView.extend({
 
     childViewOptions: function() {
         return {
-            display: this.display
+            display: this.display,
+            modalService: this.modalService,
+            editable_fields: ['attribute'],
         };
     },
 
     initialize: function(options) {
         this.display = options.display || false;
+        this.modalService = options.modalService;
     },
 
     tagName: 'ul',
@@ -163,14 +254,6 @@ var CrudAddItem = Mn.ItemView.extend({
 
 
 /*
-    Advice to implementer:
-    Take inspiration from the CrudAddItem view and how it's used by KolibriCrudView in order to create a modal
-    that allows items to be edited.
-*/
-var CrudEditItem = Mn.ItemView.extend({});
-
-
-/*
     KolibriCrudView attempts to provide a unified interface for managing lists of objects.
     As the name suggests, it provides four basic operations, all of which are customizable by passing options
     to the constructor:
@@ -225,7 +308,8 @@ var KolibriCrudView = Mn.LayoutView.extend({
 
         this.collectionView = new CrudCollection({
             collection: this.collection,
-            display: this.display
+            display: this.display,
+            modalService: this.modalService,
         });
     },
 
