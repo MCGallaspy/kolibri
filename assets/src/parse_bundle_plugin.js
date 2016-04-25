@@ -83,7 +83,7 @@ var parseBundlePlugin = function(data, base_dir) {
             },
 
             jshint: {
-                failOnHint: true
+                failOnHint: false
             },
             async_file: data.async_file
         });

@@ -6,6 +6,15 @@ var KolibriModule = require('kolibri_module');
 
 logging.setDefaultLevel(2);
 
+var ang2 = require('angular2');
+var bootstrap = require('bootstrap');
+var es6shim = require('es6-shim');
+var reflect = require('reflect-metadata');
+var rxjs = require('rxjs');
+var systemjs = require('systemjs');
+var zonjs = require('zone.js');
+var typescript = require('typescript');
+
 logging.info('Component demo loaded!');
 
 
