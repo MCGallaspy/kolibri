@@ -63,7 +63,7 @@ var CrudItem = Mn.ItemView.extend({
 
     initialize: function(options) {
         this.display = options.display || _.keys(this.model.attributes);
-        this.modalService = options.modalService || this;
+        this.modalService = options.modalService;
         _.bindAll(this, 'template');
     }
 });
@@ -81,6 +81,7 @@ var CrudCollection = Mn.CollectionView.extend({
 
     initialize: function(options) {
         this.display = options.display || false;
+        this.modalService = options.modalService;
     },
 
     tagName: 'ul',
