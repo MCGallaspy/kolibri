@@ -26,7 +26,9 @@ var config = {
         // imported requires.
         alias: {
             'kolibri_module': 'kolibri/plugins/assets/src/kolibri_module/kolibri_module',
-            'components': 'kolibri/core/assets/src/components'
+            'components': 'kolibri/core/assets/src/components',
+            'angular2-core': 'node_modules/angular2/core.js',
+            'angular2-platform-browser': 'node_modules/angular2/platform/browser.js'
         }
     }
 };

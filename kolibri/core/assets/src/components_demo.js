@@ -6,17 +6,19 @@ var KolibriModule = require('kolibri_module');
 
 logging.setDefaultLevel(2);
 
-var ang2 = require('angular2');
-var bootstrap = require('bootstrap');
-var es6shim = require('es6-shim');
+require('zone.js');
 var reflect = require('reflect-metadata');
-var rxjs = require('rxjs');
-var systemjs = require('systemjs');
-var zonjs = require('zone.js');
-var typescript = require('typescript');
+var ngcore = require('angular2-core');
+var ngbrowser = require('angular2-platform-browser');
+//var bootstrap = require('bootstrap');
+//var es6shim = require('es6-shim');
+//var rxjs = require('rxjs');
+//var systemjs = require('systemjs');
+//var typescript = require('typescript');
 
 logging.info('Component demo loaded!');
 
+var app = {};
 
 var ComponentDemoPlugin = KolibriModule.extend({
 
@@ -29,12 +31,20 @@ var ComponentDemoPlugin = KolibriModule.extend({
         // This should be the entry point for your code
         // You can add html to the component_demo.html template.
         logging.info('Demo initialized!');
+        ngbrowser.bootstrap(app.AppComponent);
     }
 });
 
 
 // Add your own code starting here.
-
+app.AppComponent =
+    ngcore.Component({
+        selector: '#my-app',
+        template: '<h1>My First Angular 2 App</h1>'
+    })
+    .Class({
+        constructor: function() {}
+    });
 
 // Boilerplate, just let this be!
 var cpd = new ComponentDemoPlugin();
