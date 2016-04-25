@@ -345,7 +345,6 @@ var ModalContainerView = Mn.LayoutView.extend({
  provided to the instantiated modalView.
  */
 app.on('showModal', function(modalView, modalTitle) {
-    console.log('showModal triggered');
     var container = new ModalContainerView({
         subview: modalView,
         title: modalTitle
