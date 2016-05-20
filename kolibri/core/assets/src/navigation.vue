@@ -1,30 +1,31 @@
 <template>
-  <header id="navigation-module">
-    <nav class="titlebar">
 
-      <div class="titlebar_left">
-        <span class="titlebar_title">{{title_bar.title}}</span>
-        <a class="titlebar_homelink" href="{{title_bar.home_link}}">Home</a>
-      </div>
+  <div class="titlebar">
+    <span class="titlebar_left">
+      <h1 class="titlebar_title">{{title_bar.title}}</h1>
+      <a class="titlebar_homelink" href="{{title_bar.home_link}}">Home</a>
+    </span>
 
-      <div class="titlebar_right">
-        <span v-on:click="user_nav_display_toggle">{{user.first_name}}</span>
-        <div class="usermenu" v-bind:style="{display: user_nav_display}">
-          <ul>
-            <li v-for="item in user_nav_items">
-              <a href={{item.url}}>{{item.text}}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <span class="titlebar_right">
+      <h2 v-on:click="user_nav_display_toggle">{{user.first_name}}</h2>
+      <nav role="user-menu-links" class="usermenu" v-bind:style="{display: user_nav_display}">
+        <ul>
+          <li v-for="item in user_nav_items">
+            <a href={{item.url}}>{{item.text}}</a>
+          </li>
+        </ul>
+      </nav>
+    </span>
+  </div>
 
-    <nav class="navlinks">
-      <div class="navlinks_item" v-for="item in nav_items">
+  <nav role="site-links" class="navlinks">
+    <ul>
+      <li class="navlinks_item" v-for="item in nav_items">
         <a href="{{item.url}}">{{ item.text }}</a>
-      </div>
-    </nav>
-  </header>
+      </li>
+    </ul>
+  </nav>
+
 </template>
 
 <script>
@@ -66,7 +67,7 @@ export default {
   $kolibri_gray = #c4c4c4
   $kolibri_nav_fonts = sans-serif
 
-  header
+  *
     font-family: $kolibri_nav_fonts
 
   .titlebar
